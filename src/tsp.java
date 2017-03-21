@@ -92,7 +92,7 @@ public class tsp {
 		System.out.println("Running GA algorithm.");
 		double start = System.currentTimeMillis();
 		for(int i = 0; i < generationsize; i++){
-			Generation = GA.evolve(Generation,1,3,3);
+			Generation = GA.evolve(Generation,1,3,0);
 //			if(i % 1000 == 0)
 //			System.out.println(i);
 		}
