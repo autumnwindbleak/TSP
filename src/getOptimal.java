@@ -1,5 +1,8 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -7,11 +10,14 @@ import Basic.Individual;
 import Basic.TspAllCities;
 import Basic.TspCity;
 
-public class testcase {
-	private TspAllCities ReadFromFile(String file){
+public class getOptimal {
+	
+	
+	
+	public static TspAllCities ReadFromFile(File f){
 		TspAllCities cities = new TspAllCities();
 		try {
-			Scanner input = new Scanner(new File(file));
+			Scanner input = new Scanner(f);
 			for(int i = 0; i < 6; i++){
 				if(!input.hasNextLine()){
 					System.out.println("Cannot read input file! System exit now!");
@@ -22,11 +28,11 @@ public class testcase {
 			while(input.hasNextLine()){
 				String line = input.nextLine();
 				if(line.equals("EOF")){
-					System.out.println("Read complete");
+//					System.out.println("Read complete");
 					break;
 				}
 				String[] tmp = line.split(" ");
-				TspCity city = new TspCity(Integer.parseInt(tmp[0]),Integer.parseInt(tmp[1]),Integer.parseInt(tmp[2]));
+				TspCity city = new TspCity(Integer.parseInt(tmp[0]),Double.parseDouble(tmp[1]),Double.parseDouble(tmp[2]));
 				cities.addCity(city);
 			}			
 		} catch (FileNotFoundException e) {
@@ -36,8 +42,7 @@ public class testcase {
 		return cities;
 	}
 	
-	
-	private ArrayList<Integer> tour(String file){
+	public static ArrayList<Integer> tour(String file){
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		try {
 			Scanner input = new Scanner(new File(file));
@@ -51,7 +56,7 @@ public class testcase {
 			while(input.hasNextLine()){
 				String line = input.nextLine();
 				if(line.equals("-1")){
-					System.out.println("Read complete");
+//					System.out.println("Read complete");
 					break;
 				}
 				result.add(Integer.parseInt(line));
@@ -63,11 +68,28 @@ public class testcase {
 		return result;
 	}
 	
+	
 	public static void main(String[] args){
-		testcase t = new testcase();
-		TspAllCities allcities = t.ReadFromFile(args[0]);
-		Individual individual = new Individual(t.tour(args[1]),allcities);
-		System.out.println(individual.getTotalCost());
+		File folder = new File("./input/"); 
+		File[] files = folder.listFiles();
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter("./optimal/optimal.txt"));
+			out.write("File name: \t Optimal Distance: \n");
+			for(int i = 0; i < files.length; i ++){
+				String o = "./optimal/" + files[i].getName().split("\\.")[0] + ".opt.tour";
+				TspAllCities allcities = ReadFromFile(files[i]);
+				Individual individual = new Individual(tour(o),allcities);
+				double best = individual.getTotalCost();
+				out.write(files[i].getName() + "\t" + best + "\n");
+				out.flush();
+			}
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
+		System.out.print("Finished.");
+		
 	}
 
 }
