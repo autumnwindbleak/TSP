@@ -10,6 +10,12 @@ import Basic.Individual;
 import Basic.Population;
 import Basic.TspAllCities;
 
+/**
+ * 
+ * @author PuzhiYAO
+ * This class contains several crossover operators which include Order Crossover,
+ * PMX Crossover, Cycle Crossover and Edge Recombination for permutation representation.
+ */
 public class Recombination {
 
 //	public static void main(String[] args) {
@@ -43,7 +49,7 @@ public class Recombination {
 //		System.out.println(cycleCrossover(p1,p2).toString());
 //	}
 
-	/*
+	/**
 	 * Cycle Crossover
 	 * This method will use p2 to generate offspring of p1,
 	 * Therefore, it has to be called twice in order to general both 
@@ -51,8 +57,11 @@ public class Recombination {
 	 * Example:
 	 * Child_of_p1 = cycleCrossover(parent1, parent2)
 	 * Child_of_p2 = cycleCrossover(parent2, parent1)
+	 * @param p1
+	 * @param p2
+	 * @return Individual newchild
 	 */
-	public static ArrayList<Integer> cycleCrossover(Individual p1, Individual p2) {
+	public static Individual cycleCrossover(Individual p1, Individual p2) {
 		int size = p1.getIndividuals().size();
 
 		// check if input is null
@@ -103,14 +112,18 @@ public class Recombination {
 		for(int i = 0; i < size; ++i) {
 			childArrayList.add(childArray[i]);
 		}
-
-		return childArrayList;
+		
+		return  new Individual(childArrayList, p1.getAllCities());
 	}
-	/*
+
+	/**
 	 * Edge crossover
 	 * Note that only one child per recombination is created by this operator.
+	 * @param p1
+	 * @param p2
+	 * @return Individual newchild
 	 */
-	public static ArrayList<Integer> edgeCrossover(Individual p1, Individual p2) {
+	public static Individual edgeCrossover(Individual p1, Individual p2) {
 		// setup 
 		int size = p1.getIndividuals().size();
 		ArrayList<Integer> childArrayList = new ArrayList<Integer>();
@@ -215,11 +228,10 @@ public class Recombination {
 		//	child.getIndividuals().add(childArrayList.get(i));
 		// }
 
-		return childArrayList;
+		return  new Individual(childArrayList,p1.getAllCities());
 	}
 
-
-	/*
+	/**
 	 * Order crossover
 	 * This method will use p2 to generate offspring of p1,
 	 * Therefore, it has to be called twice in order to general both 
@@ -227,8 +239,11 @@ public class Recombination {
 	 * Example:
 	 * Child_of_p1 = orderCrossover(parent1, parent2)
 	 * Child_of_p2 = orderCrossover(parent2, parent1)
+	 * @param p1
+	 * @param p2
+	 * @return Individual newchild
 	 */
-	public static ArrayList<Integer> orderCrossover(Individual p1, Individual p2) {
+	public static Individual orderCrossover(Individual p1, Individual p2) {
 		// setup
 		int size = p1.getIndividuals().size();
 		int[] child = new int[size];
@@ -290,18 +305,21 @@ public class Recombination {
 			childArrayList.add(child[i]);
 		}
 
-		return childArrayList;
+		return  new Individual(childArrayList,p1.getAllCities());
 	}
 
-	/*
+	/**
 	 * PMX method will use p2 to generate offspring of p1,
 	 * Therefore, it has to be called twice in order to general both 
 	 * offsprings of p1 and p2.
 	 * Example: 
 	 * Child_of_p1 = PMX(parent1, parent2)
 	 * Child_of_p2 = PMX(parent2, parent1)
+	 * @param p1
+	 * @param p2
+	 * @return Individual newchild
 	 */
-	public static ArrayList<Integer> PMX(Individual p1, Individual p2){
+	public static Individual PMX(Individual p1, Individual p2){
 		// setup
 		int size = p1.getIndividuals().size();
 		int[] child = new int[size];
@@ -354,11 +372,13 @@ public class Recombination {
 			childArrayList.add(child[i]);
 		}
 
-		return childArrayList;
+		return  new Individual(childArrayList,p1.getAllCities());
 	}
 
-	/*
+	/**
 	 * Generate two distinct random numbers
+	 * @param range
+	 * @return int[] pos
 	 */
 	public static int[] randPos(int range) {
 		// create an integer array from 0 to range
@@ -378,8 +398,11 @@ public class Recombination {
 		return pos;
 	}
 
-	/*
+	/**
 	 * Search item in array
+	 * @param A
+	 * @param target
+	 * @return boolean flag
 	 */
 	public static boolean searchAarry(int[] A, int target) {
 		boolean flag = false;
@@ -392,8 +415,10 @@ public class Recombination {
 		return flag;
 	}
 
-	/*
+	/**
 	 * Remove all reference of entry
+	 * @param map
+	 * @param ref
 	 */
 	public static void removeRef(HashMap<Integer, ArrayList<Integer>> map, int ref) {
 		for (Map.Entry<Integer, ArrayList<Integer>> entry : map.entrySet()) {		
@@ -409,10 +434,10 @@ public class Recombination {
 		}
 	}
 
-	/*
+	/**
 	 * Find common edges
-	 * Input: ArrayList with edges
-	 * return Next Entry
+	 * @param edges
+	 * @return int nextEntry
 	 */
 	public static int commonEdge(ArrayList<Integer> edges) {
 		int nextEntry = -1;

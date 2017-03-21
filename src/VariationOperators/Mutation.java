@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import Basic.Individual;
+
+/**
+ * @author PuzhiYAO
+ * This class contains several operators which include insert operator,
+ * swap operator and inversion operator for permutation representation.
+ *
+ */
 public class Mutation {
 
 //	public static void main(String[] args) {
@@ -34,13 +42,16 @@ public class Mutation {
 //		System.out.println("Insert: " + Insert(test2).toString());
 //		System.out.println("Inversion: " + Inversion(test3).toString());
 //	}
-//	
-	/*
+	
+	/**
 	 * Swap Mutation
 	 * Two positions (genes) in the chromosome are selected at
 	 * random and their allele values swapped
+	 * @param individual
+	 * @return Individual individual
 	 */
-	public static ArrayList<Integer> Swap(ArrayList<Integer> city) {
+	public static Individual Swap(Individual individual) {
+		ArrayList<Integer> city = individual.getIndividuals();
 		// generate two random position
 		int range = city.size();
 		int[] pos = randPos(range);
@@ -48,15 +59,18 @@ public class Mutation {
 		// swap integers
 		Collections.swap(city, pos[0], pos[1]);
 		
-		return city;
+		return new Individual(city,individual.getAllCities());
 	}
 	
-	/*
+	/**
 	 * Insert Mutation
 	 * Two alleles are selected at random and the second moved 
 	 * next to the first, shuffling along the others to make room.
+	 * @param individual
+	 * @return Individual individual
 	 */
-	public static ArrayList<Integer> Insert(ArrayList<Integer> city) {
+	public static Individual Insert(Individual individual) {
+		ArrayList<Integer> city = individual.getIndividuals();
 		// generate two random position
 		int range = city.size();
 		int[] pos = randPos(range);
@@ -76,16 +90,19 @@ public class Mutation {
 				index -= 1;
 			}
 		}
-		return city;
+		return new Individual(city,individual.getAllCities());
 	}
 	
-	/*
+	/**
 	 * Inversion Mutation
 	 * Inversion mutation works by randomly selecting two 
 	 * positions in the chromosome and reversing the order in which the values appear 
 	 * between those positions.
+	 * @param individual
+	 * @return Individual individual
 	 */
-	public static ArrayList<Integer> Inversion(ArrayList<Integer> city) {
+	public static Individual Inversion(Individual individual) {
+		ArrayList<Integer> city = individual.getIndividuals();
 		// generate two random position
 		int range = city.size();
 		int[] pos = randPos(range);
@@ -108,13 +125,13 @@ public class Mutation {
 			}
 		}
 			
-		return city;
+		return new Individual(city,individual.getAllCities());
 	}
 	
-	
-	
-	/*
+	/**
 	 * Generate two distinct random numbers
+	 * @param range
+	 * @return int[] pos
 	 */
 	public static int[] randPos(int range) {
 		// create an integer array from 0 to range

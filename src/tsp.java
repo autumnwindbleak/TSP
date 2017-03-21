@@ -2,25 +2,47 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import Algorithm.Distribute;
+import Algorithm.GA;
+import Algorithm.GP;
 import Basic.Population;
 import Basic.TspAllCities;
 import Basic.TspCity;
 
+
+
+/**
+ * 
+ * @author Ian
+ * 	main function
+ */
 public class tsp {
 	
-	private int population;
-	private int generation;
+	/**
+	 * the limit size of the population
+	 */
+	private int populationsize;
+	/**
+	 * the limit size of the generation
+	 */
+	private int generationsize;
 	
-	private Population firstGeneration;
+	/**
+	 * store the current Generation
+	 */
+	private Population Generation;
 	
 	
 	/**
 	 * constructor
 	 * @param file input file address
 	 */
-	tsp(String file){
+	tsp(String file,int populationsize,int generationsize){
+		this.populationsize = populationsize;
+		this.generationsize = generationsize;
 		TspAllCities cities = ReadFromFile(file);
-		firstGeneration = new Population(population,true,cities);
+		System.out.println("Population Size:\t" + populationsize + "\t Generation Size:\t" + generationsize);
+		Generation = new Population(populationsize,true,cities);
 	}
 	
 	/**
@@ -45,12 +67,13 @@ public class tsp {
 				input.nextLine();
 			}
 			while(input.hasNextLine()){
-				if(input.nextLine().equals("EOF")){
+				String line = input.nextLine();
+				if(line.equals("EOF")){
 					System.out.println("Read complete");
 					break;
 				}
-				String[] tmp = input.nextLine().split(" ");
-				TspCity city = new TspCity(Integer.parseInt(tmp[0]),Integer.parseInt(tmp[1]),Integer.parseInt(tmp[2]));
+				String[] tmp = line.split(" ");
+				TspCity city = new TspCity(Integer.parseInt(tmp[0]),Double.parseDouble(tmp[1]),Double.parseDouble(tmp[2]));
 				cities.addCity(city);
 			}			
 		} catch (FileNotFoundException e) {
@@ -63,21 +86,54 @@ public class tsp {
 	
 	
 	/**
-	 * set population limit
-	 * @param population
+	 * run GA algorithm
 	 */
-	public void setPopulation(int population){
-		this.population = population;
+	public void runGA(){
+		System.out.println("Running GA algorithm.");
+		double start = System.currentTimeMillis();
+		for(int i = 0; i < generationsize; i++){
+			Generation = GA.evolve(Generation);
+			if(i % 1000 == 0)
+			System.out.println(i);
+		}
+		double end = System.currentTimeMillis();
+		System.out.println("Time cost: " + (end - start) + "ms");
 	}
+	
 	
 	/**
-	 * set generation limit
-	 * @param generation
+	 * run GP algorithm
 	 */
-	public void setGeneration(int generation){
-		this.generation = generation;
+	public void runGP(){
+		System.out.println("Running GP algorithm.");
+		double start = System.currentTimeMillis();
+		for(int i = 0; i < generationsize; i++){
+			Generation = GP.evolve(Generation);
+		}
+		double end = System.currentTimeMillis();
+		System.out.println("Time cost: " + (end - start) + "ms");
+	}
+	/**
+	 * run distribute algorithm
+	 */
+	public void runDistribute(){
+		System.out.println("Running Distribute algorithm.");
+		double start = System.currentTimeMillis();
+		for(int i = 0; i < generationsize; i++){
+			Generation = Distribute.evolve(Generation);
+		}
+		double end = System.currentTimeMillis();
+		System.out.println("Time cost: " + (end - start) + "ms");
 	}
 	
+	
+	
+	/**
+	 * output the best distance
+	 */
+	public void output(){
+		System.out.println("Best distance is: " + Generation.getBestOne().getTotalCost());
+	}
 	
 
 	
@@ -86,13 +142,16 @@ public class tsp {
 	 * @param args [population limit, generation limit, input file address] 
 	 */
 	public static void main(String[] args){
-		int population = Integer.parseInt(args[0]);
-		int generation = Integer.parseInt(args[1]);
+		int populationsize = Integer.parseInt(args[0]);
+		int generationsize = Integer.parseInt(args[1]);
 		String file = args[2];
-		tsp instance = new tsp(file);
-		instance.setPopulation(population);
-		instance.setGeneration(generation);
-		
+		tsp instance = new tsp(file,populationsize,generationsize);
+		instance.output();
+//		instance.runGA();
+//		instance.runGP();
+		instance.runDistribute();
+		instance.output();
+	
 	}
 	
 	
