@@ -92,9 +92,9 @@ public class tsp {
 		System.out.println("Running GA algorithm.");
 		double start = System.currentTimeMillis();
 		for(int i = 0; i < generationsize; i++){
-			Generation = GA.evolve(Generation);
-			if(i % 1000 == 0)
-			System.out.println(i);
+			Generation = GA.evolve(Generation,1,3,3);
+//			if(i % 1000 == 0)
+//			System.out.println(i);
 		}
 		double end = System.currentTimeMillis();
 		System.out.println("Time cost: " + (end - start) + "ms");
@@ -147,9 +147,9 @@ public class tsp {
 		String file = args[2];
 		tsp instance = new tsp(file,populationsize,generationsize);
 		instance.output();
-//		instance.runGA();
+		instance.runGA();
 //		instance.runGP();
-		instance.runDistribute();
+//		instance.runDistribute();
 		instance.output();
 	
 	}

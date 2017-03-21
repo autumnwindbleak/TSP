@@ -93,7 +93,7 @@ public class script {
 	 */
 	public void runGA(){
 		for(int i = 0; i < generationsize; i++){
-			Generation = GA.evolve(Generation);
+			Generation = GA.evolve(Generation,1,3,3);
 		}
 	}
 	

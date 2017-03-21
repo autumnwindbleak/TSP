@@ -36,7 +36,7 @@ public class Distribute {
 			Population subparents = subParents(parents,size_of_subparents);
 			Population subchildren = new Population(size_of_subparents);
 			if(ran.nextInt(2) == 0){
-				subchildren = GA.evolve(subparents);
+				subchildren = GA.evolve(subparents,1,3,3);
 			}
 			else
 			{

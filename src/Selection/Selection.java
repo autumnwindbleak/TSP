@@ -72,9 +72,12 @@ public class Selection {
 	 * @param propabilities the weights of individuals for selection 
 	 * @param KnumbersTobeSelected K parents to be selected
 	 * @param Elitism whether to keep the best individual
-	 * @return SelectedIndex the Index of selected Individuals
+	 * @return individual[] the selected Individuals
 	 */
-	public static int[] Roulette(double[] propabilities, int KnumbersTobeSelected, boolean Elitism){
+	public static Individual[] Roulette(Population population, int KnumbersTobeSelected, boolean Elitism){
+		
+		double[] propabilities = CalculateFitnessProportionalSelection(population);
+		
 		int[] SelectedIndex = new int[KnumbersTobeSelected];
 		Random generator = new Random();
 		for(int k = 0; k < KnumbersTobeSelected; k++){
@@ -97,8 +100,11 @@ public class Selection {
 				SelectedIndex[k] = found;
 			}
 		}
-		
-		return SelectedIndex;
+		Individual[] individuals = new Individual[KnumbersTobeSelected];
+		for(int i = 0 ; i < individuals.length; i ++){
+			individuals[i] = new Individual(population.getIndividualByIndex(SelectedIndex[i]).getIndividuals(),population.getAllcities());
+		}
+		return individuals;
 		
 	}
 	

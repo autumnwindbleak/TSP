@@ -30,30 +30,34 @@ public class GA {
 	 * the size of the tournament when select parents
 	 */
 	private static int tournamentsize = 5;
+
 	/**
-	 * the type of crossover
-	 * 0 for cycle
-	 * 1 for PMX
-	 * 2 for order
-	 * 3 for random
+	 * 
+	 * @param parents  parents population
+	 * @param selectiontype 0 for FPS, 1 for tournament, 2 for random
+	 * @param crossovertype 0 for cycle, 1 for PMS, 2 for order, 3 for edge 4 for random
+	 * @param mutationtype 0 for swap, 1 for insert, 2 for inversion, 3 for random
+	 * @return
 	 */
-	private static int crossovertype = 3;
-	/**
-	 * the type of mutation
-	 * 0 for swap
-	 * 1 for insert
-	 * 2 for inversion
-	 * 3 for random
-	 */
-	private static int mutationtype = 3;
-	
-	
-	public static Population evolve(Population parents){
-		Population children = new Population(parents.SizeOfPopulation());
-		Random ran = new Random();
+	public static Population evolve(Population parents, int selectiontype, int crossovertype, int mutationtype){
 		
+		Population children = new Population(parents.SizeOfPopulation(),false,parents.getAllcities());
+		Random ran = new Random();
+		Individual[] selected_parents = new Individual[2];
 		for(int i = 0; i < children.SizeOfPopulation(); i++){
-			Individual[] selected_parents = Selection.tournamentSelection(parents,2,tournamentsize);
+			//selection
+			if(selectiontype == 2){
+				selectiontype = ran.nextInt(2);
+			}
+			switch(selectiontype){
+			case 0:
+				selected_parents = Selection.Roulette(parents, 2, false);
+				break;
+			case 1:
+				selected_parents = Selection.tournamentSelection(parents,2,tournamentsize);
+				break;
+			}
+			
 			Individual parent1 = selected_parents[0];
 			Individual parent2 = selected_parents[1];
 			Individual child = new Individual();
@@ -72,22 +76,15 @@ public class GA {
 			case 2:							//order crossover
 				child = Recombination.orderCrossover(parent1,parent2);
 				break;
-//				
-//				
-//				
-//				this part have some problems
-//				
-//				
-//				
-//				
-//			case 3:							//edge crossover
-//				child = Recombination.edgeCrossover(parent1,parent2);
-//				Individual tmp = Recombination.edgeCrossover(parent2,parent1);
-//				if(child.getFitness() <= tmp.getFitness()){
-//					child = tmp;
-//				}
-//				break;
+			case 3:							//edge crossover
+				child = Recombination.edgeCrossover(parent1,parent2);
+				Individual tmp = Recombination.edgeCrossover(parent2,parent1);
+				if(child.getFitness() <= tmp.getFitness()){
+					child = tmp;
+				}
+				break;
 			}
+			
 			//mutation
 			if(ran.nextDouble() <= mutaterate){
 				if(mutationtype == 3){
