@@ -1,0 +1,5 @@
+File Name: 	pr2392.tsp
+CrossOver 	 Muation 	 Populationsize 	 Generationsize 	 TimeCost(ms) 	 Distance 	 Standard Deviation 
+3	 0 	 200 	 20000 	 1873817.0 	 4873616.887351516 	 12.887614766364877
+3	 1 	 200 	 20000 	 1809441.0 	 3859642.7751185754 	 10.206298601477247
+3	 2 	 200 	 20000 	 1807389.0 	 2334550.7515148465 	 6.1734008711548745

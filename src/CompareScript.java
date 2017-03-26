@@ -99,17 +99,6 @@ public class CompareScript {
 	}
 	
 
-	
-	public static String[] getfiles(String foldername){
-		File folder = new File(foldername);
-		File[] files = folder.listFiles();
-		String[] result = new String[files.length];
-		for(int i = 0; i <result.length; i++){
-			result[i] = files.toString();
-		}
-		return result;
-	}
-
 
 	public static void main(String[] args){
 		int[] populationsize = {20,50,100,200};
@@ -117,7 +106,9 @@ public class CompareScript {
 		File folder = new File(args[0]);
 		File[] files = folder.listFiles();
 		File optimalfile = new File("./optimal/optimal.txt");
-		HashMap<String,Double> optimal = new HashMap<String,Double>();
+		
+		//get optimal distance
+		HashMap<String,Double> optimal = new HashMap<String,Double>();  
 		try {
 			Scanner input = new Scanner(optimalfile);
 			String line = input.nextLine();
@@ -129,7 +120,6 @@ public class CompareScript {
 				distance = Double.parseDouble(line.split("\t")[1]);
 				optimal.put(name, distance);
 			}
-			
 			
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
@@ -144,30 +134,29 @@ public class CompareScript {
 			
 			BufferedWriter out = new BufferedWriter(new FileWriter(outputfile));  
 			
-			double start = 0; 
-			double end = 0;
-			double cost = 0;
+			double start = 0; 	//start time
+			double end = 0;  	//end time
+			double cost = 0;	//time cost
 			double distance = 0;
 			
-			double bestd = Double.MAX_VALUE;
-			double bestt = Double.MAX_VALUE;
+			double bestd = Double.MAX_VALUE; //best distance
+			double bestt = Double.MAX_VALUE; //best time cost
 			double sd;
 			
-			for(int i = 0; i < files.length; i++){
+			for(int i = 0; i < files.length; i++){		//for each file in the folder
 				out.write("File Name: \t" + files[i].getName() + "\n");
 				System.out.println("file:\t" + files[i].getName() );
 				out.write("CrossOver \t Muation \t Populationsize \t Generationsize \t TimeCost(ms) \t Distance \t Standard Deviation \n");
-				for(int j = 0; j < populationsize.length; j++){
+				for(int j = 0; j < populationsize.length; j++){							//for each populationsize
 //					System.out.println("populationsize: \t" + populationsize[j]);
-					for(int k = 0; k < generationsize.length; k++){
+					for(int k = 0; k < generationsize.length; k++){						// for each generationsize
 //						System.out.println("Generationsize: \t " + generationsize[k]);
-						
-						CompareScript instance = new CompareScript(files[i].toString(),populationsize[j],generationsize[k]);
-						for(int ctype = 0; ctype < 4; ctype ++){
-							for(int mtype = 0; mtype < 3; mtype ++){
+						for(int ctype = 0; ctype < 4; ctype ++){						// for each crossover type
+							for(int mtype = 0; mtype < 3; mtype ++){					// for each mutation type
 								bestd = Double.MAX_VALUE;
 								bestt = Double.MAX_VALUE;
-								for(int time = 0; time <5; time ++){
+								for(int time = 0; time <5; time ++){					// run for 5 times and get the best
+									CompareScript instance = new CompareScript(files[i].toString(),populationsize[j],generationsize[k]);
 									start = System.currentTimeMillis();
 									instance.runGA(ctype,mtype);
 									end = System.currentTimeMillis();
