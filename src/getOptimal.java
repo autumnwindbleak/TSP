@@ -9,11 +9,19 @@ import java.util.Scanner;
 import Basic.Individual;
 import Basic.TspAllCities;
 import Basic.TspCity;
-
+/**
+ * using optimal tour to get the optimal cost
+ * @author ian
+ *
+ */
 public class getOptimal {
 	
 	
-	
+	/**
+	 * get all cities information from files
+	 * @param f file path
+	 * @return TspAllcities 
+	 */
 	public static TspAllCities ReadFromFile(File f){
 		TspAllCities cities = new TspAllCities();
 		try {
@@ -42,6 +50,11 @@ public class getOptimal {
 		return cities;
 	}
 	
+	/**
+	 * get the optimal tour to create the optimal individual 
+	 * @param file file path
+	 * @return ArrayList<Integer> the node id in order
+	 */
 	public static ArrayList<Integer> tour(String file){
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		try {
@@ -68,7 +81,10 @@ public class getOptimal {
 		return result;
 	}
 	
-	
+	/**
+	 * main function
+	 * @param args
+	 */
 	public static void main(String[] args){
 		File folder = new File("./input/"); 
 		File[] files = folder.listFiles();
